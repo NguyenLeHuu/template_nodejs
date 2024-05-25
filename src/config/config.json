@@ -1,0 +1,37 @@
+{
+    "development": {
+      "username": "root",
+      "password": "070900",
+      "database": "bcs3_db",
+      "host": "localhost",
+      "dialect": "mysql",
+      "logging": true,
+      "query": {
+        "raw": true
+      },
+      "define": {
+        "timestamps": false
+      }
+    },
+    "test": {
+      "username": "clinicsy_root",
+      "password": "nguyenlehuu070900",
+      "database": "clinicsy_bcs_db",
+      "host": "host80.vietnix.vn",
+      "dialect": "mysql"
+    },
+    "production": {
+      "username": "clinicsy_root",
+      "password": "nguyenlehuu070900",
+      "database": "clinicsy_bcs_db",
+      "host": "host80.vietnix.vn",
+      "dialect": "mysql",
+      "logging": true,
+      "query": {
+        "raw": true
+      },
+      "define": {
+        "timestamps": false
+      }
+    }
+  }
