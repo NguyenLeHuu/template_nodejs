@@ -2,8 +2,11 @@ const express = require("express");
 
 let router = express();
 
-const loginRoute = require("./LoginRoute");
+const accountRoute = require("./accountRoute");
 
-router.use("/login", loginRoute);
+router.use("/account", accountRoute);
+// router.use("/favorite-room", accountRoute);
+// router.use("/book-schedules", accountRoute);
+// router.use("/post", accountRoute);
 
 module.exports = router;
