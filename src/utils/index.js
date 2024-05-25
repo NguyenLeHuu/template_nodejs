@@ -9,7 +9,7 @@ function setStatus(data) {
     }
   }
   
-  function getCurDay() {
+function getCurDay() {
     const ngayHienTai = new Date();
     const ngay = ngayHienTai.getDate();
     const thang = ngayHienTai.getMonth() + 1; // Lưu ý rằng tháng bắt đầu từ 0
@@ -19,8 +19,17 @@ function setStatus(data) {
     const ngayThangNam = `${nam}-${thang}-${ngay}`;
     return ngayThangNam;
   }
+
+function Response(res,status, message, data) {
+    return res.status(status).json({
+      status: status,
+      message:message,
+      data: data,
+    });
+  }
   
   module.exports = {
-    setStatus: setStatus,
+    setStatus,
     getCurDay,
+    Response
   };
