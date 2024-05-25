@@ -1,68 +1,56 @@
 // const db = require("../models/index");
 // const CustomerService = require("../services/CustomerService");
 import {ObjectId } from "mongodb";
+import { Response } from "../utils";
 const jwt = require("jsonwebtoken");
 const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 
 var refreshTokens = [];
 module.exports = {
-  async checkUserInDB(req, res) {
+  async login(req, res) {
+    /* 
+        #swagger.tags = ['account']
+         #swagger.description = "return information of account if it exist in DB"
+        */
+    try {
+      const { email } = req.body;
+      let account = await findOne("account",{email}) 
+          const accessToken = jwt.sign(
+            { account_id: account.email },
+            process.env.ACCESS_TOKEN_SECRET,
+            {
+              expiresIn: "1000d",
+            }
+          );
+          return Response(res,200,"success",{data: account, accessToken })
+        } 
+      catch (error) {
+      return Response(res,400,"fail","")
+    }
   },
 
   async store(req,res){
     /* 
         #swagger.tags = ['account']
         */
-    const {email,role,} = req.body
-    let rs = await insertOne("account",{email,role})
+    const {email,is_owner,is_renter} = req.body
+    let rs = await insertOne("account",{email,is_owner,is_renter})
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   },
-  async login(req,res){
-    /* 
-        #swagger.tags = ['account']
-        */
-    const {email} = req.body
-    let rs = await findOne("account",{email})
-    if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
-    }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
-    }
-  },
+
   async findAll(req,res){
     /* 
         #swagger.tags = ['account']
         */
     let rs = await findAll("account",{})
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   },
   async find(req,res){
@@ -72,16 +60,9 @@ module.exports = {
     const id = req.params
     let rs = await findOne("account",{_id:new ObjectId(id)})
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   },
   async update(req,res){
@@ -94,16 +75,9 @@ module.exports = {
     let rs = await updatetOne("account",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   },
   async delete(req,res){
@@ -113,16 +87,9 @@ module.exports = {
     const id = req.params
     let rs = await deleteFunction("account",{_id:new ObjectId(id)})
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   }
 };
