@@ -21,7 +21,7 @@ const options = {
     info: {
       version: "1.0.0", // by default: '1.0.0'
       title: "My server swagger", // by default: 'REST API'
-      description: "API interface", // by default: ''
+      description: "API update: truyền những field cần update thôi", // by default: ''
     },
     basePath: "/", // by default: '/'
     servers: [

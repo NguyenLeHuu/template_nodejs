@@ -1,3 +1,5 @@
+API update: truyền những field cần update thôi
+
 role: renter, owner
 
 schema:
@@ -23,9 +25,10 @@ post:{
     area,
     list_image_url,
     address,
-    comments:[],
     time_created,
+    comments:[],
     is_active,
+    view_counts
 };
 favorite-post:{
     renter_id,
