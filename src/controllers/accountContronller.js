@@ -2,6 +2,7 @@
 // const CustomerService = require("../services/CustomerService");
 import {ObjectId } from "mongodb";
 import { Response } from "../utils";
+import Firebase  from "../services/firebase";
 const jwt = require("jsonwebtoken");
 const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 
@@ -69,9 +70,21 @@ module.exports = {
     /* 
         #swagger.tags = ['account']
         */
+       /*
+         #swagger.consumes = ['multipart/form-data']  
+          #swagger.parameters['image'] = {
+              in: 'formData',
+              type: 'file',
+              required: 'true',
+        } */
     const id= req.params
     console.log(req.body);
     const {name,age,address} = req.body
+    let image =
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy_QPLISHeW6nHqBiEzRi7iMSlDv35C8cj1Q&usqp=CAU";
+      if (req.file) {
+        image = await Firebase.uploadImage(req.file);
+      }
     let rs = await updatetOne("account",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){

@@ -8,8 +8,7 @@ account:{
     phone,
     image_url,
     name,
-    address_line1,
-    address_line2,
+    address_line,
     dob,
     is_new,
     is_private,
@@ -45,10 +44,10 @@ book-schedules:{
     renter_id,
     renter_name,
     time,
-    status: not_confirm,confirmed,done,cancel
+    status: pending,confirmed,done,cancel
 };
 config-app:{
-    discount_newbie:,
+    discount_newbie,
     discount_vip,
     price_every_post,
 }

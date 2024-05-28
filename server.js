@@ -14,6 +14,8 @@ const swaggerFile = require("./swagger_output.json");
 
 const run_mongo = require("./src/config/_mongodb.js")
 
+const stripeApp = require("./src/payment/stripe.js")
+
 require("dotenv").config(); // get value from .env
 
 let app = express();
@@ -44,3 +46,12 @@ var server = http.createServer(app);
 server.listen(port, () => {
   console.log(`Server start port http://localhost:${port}`);
 });
+
+
+// const { Server } = require("socket.io");
+// const io = new Server(server, {
+//   cors: {
+//   },
+// });
+// const initializeSocket = require("./src/services/Socket.io");
+// initializeSocket(io);
