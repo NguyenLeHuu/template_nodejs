@@ -44,3 +44,12 @@ var server = http.createServer(app);
 server.listen(port, () => {
   console.log(`Server start port http://localhost:${port}`);
 });
+
+
+// const { Server } = require("socket.io");
+// const io = new Server(server, {
+//   cors: {
+//   },
+// });
+// const initializeSocket = require("./src/services/Socket.io");
+// initializeSocket(io);
