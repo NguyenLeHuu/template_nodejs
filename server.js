@@ -14,6 +14,10 @@ const swaggerFile = require("./swagger_output.json");
 
 const run_mongo = require("./src/config/_mongodb.js")
 
+const initializeCron = require("./src/services/cron.js");
+
+initializeCron();
+
 require("dotenv").config(); // get value from .env
 
 let app = express();
