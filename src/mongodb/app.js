@@ -63,6 +63,7 @@ export async function findAll(collection,payload) {
     );
 }
 export async function updatetOne(collection,payload) {
+  console.log(payload,"payload");
     return new Promise(async (resolve, reject) => {
         const client = new MongoClient(MONGODB_SETTING.uri);
         try {
