@@ -11,8 +11,8 @@ const STRIPE_SETTINGS = {
   pricing_table_id: "prctbl_1PDPH8FT7i2QToFKiUzCarft",
   stripe_hook_key: 'whsec_73b1a5f6a81f89f3bd7519b35e201d9d314baf70862496e1a7566a0810aa38d6',
   stripe_server: 'http://localhost:3000',
-  stripe_success_url: 'https://www.google.com/',
-  stripe_cancel_url: 'https://www.google.com/',
+  stripe_success_url: 'http://192.168.137.1:8081/checkout/success.html',
+  stripe_cancel_url: 'http://192.168.137.1:8081/checkout/canceled.html',
   stripe_pk: 'pk_test_51PFIBzGCFOEiUw2fhze5xe5fTEVhOXW9D7DdwnjTTfXD4CIkpIkDnZMB7zpupgPfhg0uSfgygA1uB7e0scoF96Gu006h9baxGm',
   stripe_sk: 'sk_test_51PFIBzGCFOEiUw2fcIx24LDuPfTbMIYePm9A9jkKcTn8oade4Q9erxDuWz21rsxinoWUEvVAaF51sz4fMmY3jt0r00PGf7PmUT'
 };
@@ -56,7 +56,7 @@ route.post('/create-checkout-session', async (req, res) => {
 /* 
         #swagger.tags = ['stripe']
         */
- 
+ console.log("create-checkout-session");
   try {
     const body = req.body;
     const stripe = require("stripe")(STRIPE_SETTINGS.stripe_sk);
@@ -77,12 +77,12 @@ route.post('/create-checkout-session', async (req, res) => {
 
 route.post("/webhook", async (request, response) => {
   //#swagger.tags = ['stripe']
-
+console.log("chay webhook");
   let event = request.body;
   switch (event.type) {
     case "checkout.session.completed":
       const checkout_complete = event.data.object;
-      console.log(checkout_complete, `ckcplckcplckcplckcplckcplckcpl`);
+      // console.log(checkout_complete, `ckcplckcplckcplckcplckcplckcpl`);
       let [ma_hoa_don, uid] = checkout_complete.client_reference_id.split('--');
       console.log(ma_hoa_don, "-----------------ma_hoa_don");
       console.log(uid, "-----------------uid");

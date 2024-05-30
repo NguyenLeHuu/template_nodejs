@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charge</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="./index.js"></script>
+  </head>
+
+<body>
+  <h1>Charge</h1>
+  <form id="payment-form">
+    <input type="text" id="card-holder-name" placeholder="Cardholder Name">
+    <div id="card-element"></div>
+    <button type="submit">Submit Payment</button>
+  </form>
+
+  <script>
+    var stripe = Stripe(STRIPE_SETTINGS.stripe_pk);
+    var elements = stripe.elements();
+    var cardElement = elements.create('card');
+    cardElement.mount('#card-element');
+
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      stripe.createToken(cardElement).then(function (result) {
+        if (result.error) {
+          console.error(result.error.message);
+        } else {
+          var token = result.token;
+          // Send the token to your server
+          fetch(`${STRIPE_SETTINGS.stripe_server}/charge`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: token.id }),
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Failed to charge');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log(data);
+              alert('Payment successful!');
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('Payment failed. Please try again later.');
+            });
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

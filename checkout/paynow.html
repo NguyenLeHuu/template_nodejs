@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pay Now</title>
+</head>
+<body>
+  <h1>Product Name</h1>
+  <p>Description of the product id 65dede08726526d846131bbf</p>
+  <input type="number" id="amount" name="amount" value="10000">vnd
+  <button id="checkout-button">Pay Now</button>
+  <p  id="error_message"></p>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    // 'http://localhost:8080/checkout/paynow.html',
+
+    document.getElementById('checkout-button').addEventListener('click', function() {
+      const line_item = [
+      {
+         "price_data":{
+            "currency":"vnd",
+            "product_data":{
+               "name":"ten hang hoa",
+               "description":"Mô tả sản phẩm trống"
+            },
+            "unit_amount":20000
+         },
+         "quantity":2
+      }
+   ]
+      error_message.innerHTML = 'Processing checkout'
+      fetch(`${STRIPE_SETTINGS.stripe_server}/stripe/create-checkout-session`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currency: STRIPE_SETTINGS.currency,
+          unit_amount: amount.value,
+          line_items:line_item,
+          client_reference_id: "0354187011--HD1234",
+          stripe_success_url: STRIPE_SETTINGS.stripe_success_url,
+          stripe_cancel_url: STRIPE_SETTINGS.stripe_cancel_url,
+        })
+      })
+      .then(function(response) {
+        return response.json();
+      })
+      .then(function(session) {
+        // our server error occurred
+        if (session.error) {
+          console.error('Our server error:', session.error);
+          error_message.innerHTML = session.error
+          return session
+        } else {
+          const publish_key = STRIPE_SETTINGS.stripe_pk 
+          var stripe = Stripe(publish_key);
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        }
+      })
+      .catch(function(error) {
+        console.error('Stripe error:', error);
+        error_message.innerHTML = error.message
+      });
+    });
+  </script>
+
+</body>
+    <script src="index.js"></script>
+
+</html>
