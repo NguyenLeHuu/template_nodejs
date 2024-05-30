@@ -14,8 +14,6 @@ const swaggerFile = require("./swagger_output.json");
 
 const run_mongo = require("./src/config/_mongodb.js")
 
-const stripeApp = require("./src/payment/stripe.js")
-
 require("dotenv").config(); // get value from .env
 
 let app = express();
