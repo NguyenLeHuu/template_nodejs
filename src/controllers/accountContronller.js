@@ -35,12 +35,17 @@ module.exports = {
         #swagger.tags = ['account']
         */
     const {email,is_owner,is_renter} = req.body
-    let rs = await insertOne("account",{email,is_owner,is_renter})
-    if(rs){
-      return Response(res,200,"success",rs)
-    }else{
-      return Response(res,400,"fail","")
+    let account = await findOne("account",{email})
+
+    if(account){
+      return Response(res,400,"Tài khoản đã tồn tại","")
     }
+    let rs = await insertOne("account",{email,is_owner,is_renter})
+      if(rs){
+        return Response(res,200,"success",rs)
+      }else{
+        return Response(res,400,"Tạo tài khoản thất bại","")
+      }
   },
 
   async findAll(req,res){
