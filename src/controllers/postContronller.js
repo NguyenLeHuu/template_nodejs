@@ -21,7 +21,7 @@ module.exports = {
       description,
       price,
       area,
-      list_image_url,
+      utilities,
       address,
       comments,
       time_created,
