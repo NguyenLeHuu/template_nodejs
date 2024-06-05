@@ -1,9 +1,10 @@
 const promiseRouter = require("express-promise-router");
 const postContronller = require("../controllers/postContronller");
+const multer = require("../middleware/GetImgMiddleware");
 
 let route = promiseRouter();
 
-route.post("/", postContronller.store);
+route.post("/",multer.Multer.array("image"), postContronller.store);
 route.get("/", postContronller.findAll);
 route.get("/:id", postContronller.find);
 route.put("/:id", postContronller.update);

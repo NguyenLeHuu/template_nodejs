@@ -3,12 +3,18 @@
 import {ObjectId } from "mongodb";
 import { Response } from "../utils";
 const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
+import Firebase  from "../services/firebase";
 
 module.exports = {
   async store(req,res){
     /* 
         #swagger.tags = ['post']
-        */
+         #swagger.consumes = ['multipart/form-data']  
+          #swagger.parameters['image'] = {
+              in: 'formData',
+              type: 'file',
+              required: 'true',
+        } */
     const {
       author,
       title,
@@ -21,6 +27,14 @@ module.exports = {
       time_created,
       is_active,
       view_counts} = req.body
+
+      
+      const images = [];
+      req.files.forEach(async file =>  {
+        const url = await Firebase.uploadImage(file);
+        images.push(url);
+      });
+      req.body.images = images
     let rs = await insertOne("post",req.body)
     if(rs){
       return Response(res,200,"success",rs)

@@ -18,6 +18,7 @@ account:{
 };
 post:{
     author,
+    phone,
     title,
     description,
     price,
