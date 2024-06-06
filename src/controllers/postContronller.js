@@ -4,6 +4,7 @@ import {ObjectId } from "mongodb";
 import { Response } from "../utils";
 const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 import Firebase  from "../services/firebase";
+import {getCurDay}  from "../utils/index";
 
 module.exports = {
   async store(req,res){
@@ -28,13 +29,13 @@ module.exports = {
       is_active,
       view_counts} = req.body
 
-      
       const images = [];
       req.files.forEach(async file =>  {
         const url = await Firebase.uploadImage(file);
         images.push(url);
       });
       req.body.images = images
+      time_created = getCurDay()
     let rs = await insertOne("post",req.body)
     if(rs){
       return Response(res,200,"success",rs)
