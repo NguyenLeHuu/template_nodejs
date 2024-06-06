@@ -25,7 +25,6 @@ module.exports = {
       utilities,
       address,
       comments,
-      time_created,
       is_active,
       view_counts} = req.body
 
@@ -34,9 +33,28 @@ module.exports = {
         const url = await Firebase.uploadImage(file);
         images.push(url);
       });
-      req.body.images = images
-      time_created = getCurDay()
-    let rs = await insertOne("post",req.body)
+
+      const now = new Date();
+      const time_created = new Date()
+      //now.getTime() + 7 * 60 * 60 * 1000
+      const newPost = {
+        author,
+        title,
+        description,
+        price,
+        area,
+        utilities,
+        images,
+        address,
+        comments,
+        is_active,
+        view_counts,
+        images,
+        time_created
+      };
+
+      // req.body.images = images
+    let rs = await insertOne("post",newPost)
     if(rs){
       return Response(res,200,"success",rs)
     }else{
