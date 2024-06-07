@@ -75,6 +75,29 @@ route.post('/create-checkout-session', async (req, res) => {
   }
 });
 
+route.post("/create-payment-intent", async (req, res) => {
+  /* 
+        #swagger.tags = ['stripe']
+        */
+  // const { items } = req.body;
+try {
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: req.body.amount,
+    currency: "vnd",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.json({
+    clientSecret: paymentIntent.client_secret,
+  });
+} catch (error) {
+  res.status(400).json({error:e.message})
+}
+  
+});
+
 route.post("/webhook", async (request, response) => {
   //#swagger.tags = ['stripe']
 console.log("chay webhook");
