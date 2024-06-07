@@ -20,7 +20,7 @@ const options = {
   const doc = {
     info: {
       version: "1.0.0", // by default: '1.0.0'
-      title: "My server swagger", // by default: 'REST API'
+      title: "Fasthub server", // by default: 'REST API'
       description: "API interface", // by default: ''
     },
     basePath: "/", // by default: '/'
@@ -30,8 +30,7 @@ const options = {
         description: "local server",
       },
       {
-        // url: `https://ec2-54-169-148-196.ap-southeast-1.compute.amazonaws.com`,
-        url: `https://clinicsystem.io.vn/`,
+        url: `https://fasthub-server.onrender.com`,
         description: "Server in hosting",
       },
     ],

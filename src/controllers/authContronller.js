@@ -11,7 +11,7 @@ module.exports = {
 
   async store(req,res){
     /* 
-        #swagger.tags = ['account']
+        #swagger.tags = ['auth']
         */
     const {email,role,} = req.body
     let rs = await insertOne("fasthub_res_khach_hang",{email,role})
@@ -30,7 +30,7 @@ module.exports = {
   },
   async login(req,res){
     /* 
-        #swagger.tags = ['account']
+        #swagger.tags = ['auth']
         */
     const {email} = req.body
     let rs = await findOne("fasthub_res_khach_hang",{email})
@@ -49,7 +49,7 @@ module.exports = {
   },
   async findAll(req,res){
     /* 
-        #swagger.tags = ['account']
+        #swagger.tags = ['auth']
         */
     let rs = await findAll("fasthub_res_khach_hang",{})
     if(rs){
@@ -67,7 +67,7 @@ module.exports = {
   },
   async find(req,res){
     /* 
-        #swagger.tags = ['account']
+        #swagger.tags = ['auth']
         */
     const id = req.params
     let rs = await findOne("fasthub_res_khach_hang",{_id:new ObjectId(id)})
@@ -86,7 +86,7 @@ module.exports = {
   },
   async update(req,res){
     /* 
-        #swagger.tags = ['account']
+        #swagger.tags = ['auth']
         */
     const id= req.params
     console.log(req.body);
@@ -108,7 +108,7 @@ module.exports = {
   },
   async delete(req,res){
     /* 
-        #swagger.tags = ['account']
+        #swagger.tags = ['auth']
         */
     const id = req.params
     let rs = await deleteFunction("fasthub_res_khach_hang",{_id:new ObjectId(id)})

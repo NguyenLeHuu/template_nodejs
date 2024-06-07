@@ -3,8 +3,8 @@ const accountContronller = require("../controllers/accountContronller");
 
 let route = promiseRouter();
 
+// route.post("/login", accountContronller.login);
 route.post("/register", accountContronller.store);
-route.post("/login", accountContronller.login);
 route.get("/", accountContronller.findAll);
 route.get("/:id", accountContronller.find);
 route.put("/:id", accountContronller.update);

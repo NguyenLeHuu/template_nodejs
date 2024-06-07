@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 const MONGODB_SETTING={
-  uri : "mongodb+srv://admin:nguyenlehuu070900@cluster0.lp5othy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-  db_name: "cho_thue_phong_tro"
+  uri : "mongodb+srv://devmaysoft:devmaysoft@cluster0.bjfird1.mongodb.net/mongodb+srv://admin:nguyenlehuu070900@cluster0.lp5othy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+  db_name: "banhang-maysoft"
 }
 
 export async function insertOne(collection,payload) {
