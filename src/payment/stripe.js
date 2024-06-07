@@ -81,6 +81,7 @@ route.post("/create-payment-intent", async (req, res) => {
         */
   // const { items } = req.body;
 try {
+   const stripe = require("stripe")(STRIPE_SETTINGS.stripe_sk);
   const paymentIntent = await stripe.paymentIntents.create({
     amount: req.body.amount,
     currency: "vnd",
@@ -88,11 +89,10 @@ try {
       enabled: true,
     },
   });
-
   res.json({
     clientSecret: paymentIntent.client_secret,
   });
-} catch (error) {
+} catch (e) {
   res.status(400).json({error:e.message})
 }
   
