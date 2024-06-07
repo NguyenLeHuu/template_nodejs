@@ -62,6 +62,32 @@ export async function findAll(collection,payload) {
       }
     );
 }
+export async function updatetComment(collection,payload) {
+    return new Promise(async (resolve, reject) => {
+        const client = new MongoClient(MONGODB_SETTING.uri);
+        try {
+            const database = client.db(MONGODB_SETTING.db_name);
+            const collectionRef = database.collection(collection);
+            if(payload.filter &&payload.data){
+
+              const result = await collectionRef.updateOne(
+                payload.filter,
+                { $push: { comments: payload.data } },
+                { upsert: false }
+              );
+            console.log(`A document was update : ${result}`);
+          resolve(result);
+        }
+        } catch (e) {
+           console.log(e);
+          reject(e);
+        }
+        finally {
+            await client.close();
+        }
+      }
+    );
+}
 export async function updatetOne(collection,payload) {
   console.log(payload,"payload");
     return new Promise(async (resolve, reject) => {

@@ -2,7 +2,7 @@
 // const CustomerService = require("../services/CustomerService");
 import {ObjectId } from "mongodb";
 import { Response } from "../utils";
-const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
+const {insertOne, findOne,updatetOne,updatetComment,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 import Firebase  from "../services/firebase";
 import {getCurDay}  from "../utils/index";
 
@@ -18,6 +18,7 @@ module.exports = {
         } */
     const {
       author,
+      phone,
       title,
       description,
       price,
@@ -33,28 +34,10 @@ module.exports = {
         const url = await Firebase.uploadImage(file);
         images.push(url);
       });
-
-      const now = new Date();
-      const time_created = new Date()
       //now.getTime() + 7 * 60 * 60 * 1000
-      const newPost = {
-        author,
-        title,
-        description,
-        price,
-        area,
-        utilities,
-        images,
-        address,
-        comments,
-        is_active,
-        view_counts,
-        images,
-        time_created
-      };
-
-      // req.body.images = images
-    let rs = await insertOne("post",newPost)
+      req.body.time_created = new Date();
+      req.body.comments = []
+    let rs = await insertOne("post",req.body)
     if(rs){
       return Response(res,200,"success",rs)
     }else{
@@ -79,6 +62,26 @@ module.exports = {
         */
     const id = req.params
     let rs = await findOne("post",{_id:new ObjectId(id)})
+    if(rs){
+      return Response(res,200,"success",rs)
+    }else{
+      return Response(res,400,"fail","")
+    }
+  },
+  async updateCmt(req,res){
+    /* 
+        #swagger.tags = ['post']
+        */
+    const id= req.params
+    console.log(req.body);
+    const {
+      account_id,
+      displayName,
+      photoURL,
+      content
+    } = req.body
+    let rs = await updatetComment("post",
+    {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){
       return Response(res,200,"success",rs)
     }else{

@@ -14,15 +14,27 @@ module.exports = {
         */
     try {
       const { email } = req.body;
-      let account = await findOne("account",{email}) 
+      let account = await findOne("account",{email})
+      let newAccount = {email,
+        is_private:false,
+        is_new:true,
+        amount_spent:0,
+        address:"",
+        image: req.body.photoURL,
+        name:req.body.displayName,
+        phone: ""
+      }
+          if(!account){
+             await insertOne("account",newAccount)
+          }
           const accessToken = jwt.sign(
-            { account_id: account.email },
+            { account_id: account?account.email:email},
             process.env.ACCESS_TOKEN_SECRET,
             {
               expiresIn: "1000d",
             }
           );
-          return Response(res,200,"success",{data: account, accessToken })
+          return Response(res,200,"success",{data: account?account:newAccount, accessToken })
         } 
       catch (error) {
       return Response(res,400,"fail","")

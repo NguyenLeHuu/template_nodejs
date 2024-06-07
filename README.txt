@@ -26,7 +26,7 @@ post:{
     list_image_url,
     address,
     time_created,
-    comments:[],
+    comments:[ten, anh, noi dung, id],
     is_active,
     view_counts
 };
