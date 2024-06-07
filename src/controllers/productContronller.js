@@ -13,8 +13,11 @@ module.exports = {
     /* 
         #swagger.tags = ['product']
         */
-    const {email,role,} = req.body
-    let rs = await insertOne("fasthub_san_pham",{email,role})
+    const {loai_hang,danh_muc,ten_hang_hoa,mo_ta,gia_ban,
+           hinh_anh_url1_url2,la_hang_flash_sales,la_hang_cho_tang,
+           la_hang_ky_gui,la_thue_nha
+    } = req.body
+    let rs = await insertOne("fasthub_san_pham",req.body)
     if(rs){
       return res.status(200).json({
         status: 200,
@@ -90,7 +93,7 @@ module.exports = {
         */
     const id= req.params
     console.log(req.body);
-    const {name,age,address} = req.body
+    const {ten_hang_hoa,gia_ban} = req.body
     let rs = await updatetOne("fasthub_san_pham",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){

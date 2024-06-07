@@ -13,8 +13,21 @@ module.exports = {
     /* 
         #swagger.tags = ['order']
         */
-    const {email,role,} = req.body
-    let rs = await insertOne("fasthub_res_don_hang",{email,role})
+    const {
+      is_cart,
+      uid,
+      phone,
+      san_pham,
+      loai_hang,
+      ghi_chu,
+      gio_bat_dau,
+      ngay_bat_dau,
+      ngay_mua,
+      phuong_thuc_thanh_toan,
+      tong_hoa_don,
+      trang_thai
+    } = req.body
+    let rs = await insertOne("fasthub_res_don_hang",req.body)
     if(rs){
       return res.status(200).json({
         status: 200,
@@ -90,7 +103,20 @@ module.exports = {
         */
     const id= req.params
     console.log(req.body);
-    const {name,age,address} = req.body
+    const {
+      is_cart,
+      uid,
+      phone,
+      san_pham,
+      loai_hang,
+      ghi_chu,
+      gio_bat_dau,
+      ngay_bat_dau,
+      ngay_mua,
+      phuong_thuc_thanh_toan,
+      tong_hoa_don,
+      trang_thai
+    } = req.body
     let rs = await updatetOne("fasthub_res_don_hang",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){

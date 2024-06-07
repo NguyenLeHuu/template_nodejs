@@ -13,8 +13,8 @@ module.exports = {
     /* 
         #swagger.tags = ['account']
         */
-    const {email,role,} = req.body
-    let rs = await insertOne("fasthub_res_khach_hang",{email,role})
+    const {phone,password} = req.body
+    let rs = await insertOne("fasthub_res_khach_hang",req.body)
     if(rs){
       return res.status(200).json({
         status: 200,

@@ -1,5 +1,32 @@
 fasthub_res_khach_hang:{
-    
+    uid
+    phone
+    password
+    address
 },
-fasthub_san_pham:{},
-fasthub_res_don_hang:{},
+fasthub_san_pham:{
+    loai_hang
+    danh_muc
+    ten_hang_hoa
+    gia_ban
+    hinh_anh_url1_url2
+    mo_ta
+    la_hang_flash_sales
+    la_hang_cho_tang
+    la_hang_ky_gui
+    la_thue_nha
+},
+fasthub_res_don_hang:{
+    is_cart
+    uid
+    phone
+    san_pham
+    loai_hang
+    ghi_chu
+    gio_bat_dau
+    ngay_bat_dau
+    ngay_mua
+    phuong_thuc_thanh_toan
+    tong_hoa_don
+    trang_thai
+},
