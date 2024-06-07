@@ -32,7 +32,7 @@ app.use(limiter);
 
 app.get("/", function (req, res) {
   res.set("Content-Type", "text/html; charset=utf-8");
-  res.send("<h1>Hello World 1</h1>");
+  res.send("<h1>Hello World 2</h1>");
 });
 app.use("/", route);
 let port = process.env.PORT || 3000;
