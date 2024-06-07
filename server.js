@@ -15,7 +15,7 @@ require("dotenv").config(); // get value from .env
 let app = express();
 app.use(helmet());
 app.use(morgan("combined"));
-app.use(cors({ origin: true }));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
@@ -46,8 +46,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-var server = http.createServer(app);
+// var server = http.createServer(app);
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server start port http://localhost:${port}`);
 });

@@ -30,7 +30,7 @@ const options = {
         description: "local server",
       },
       {
-        url: `https://fasthub-server.onrender.com`,
+        url: `https://fasthub-server-v1ps.onrender.com`,
         description: "Server in hosting",
       },
     ],
