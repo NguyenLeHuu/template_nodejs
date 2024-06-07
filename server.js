@@ -15,10 +15,11 @@ require("dotenv").config(); // get value from .env
 let app = express();
 app.use(helmet());
 app.use(morgan("combined"));
-app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
+app.use(cors());
+
 
 // Rate limiting
 const limiter = rateLimit({
@@ -31,7 +32,7 @@ app.use(limiter);
 
 app.get("/", function (req, res) {
   res.set("Content-Type", "text/html; charset=utf-8");
-  res.send("<h1>Hello World</h1>");
+  res.send("<h1>Hello World 1</h1>");
 });
 app.use("/", route);
 let port = process.env.PORT || 3000;
