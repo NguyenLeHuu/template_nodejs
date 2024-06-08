@@ -91,17 +91,21 @@ module.exports = {
           #swagger.parameters['image'] = {
               in: 'formData',
               type: 'file',
-              required: 'true',
+              required: 'false',
         } */
     const id= req.params
     console.log(req.body);
-    const {name,age,address} = req.body
-    let image ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRezkhZEGyU-SbkR5X1RGxo8OxQFLfKonocyg&s"
+    const {name,phone,address,is_private} = req.body
+
+    const isPrivateBoolean = is_private === 'true' ? true : is_private === 'false' ? false : undefined;
+    if (isPrivateBoolean !== undefined) {
+      req.body.is_private = isPrivateBoolean;
+    }
     if (req.file) {
         console.log("zo");
-        image = await Firebase.uploadImage(req.file);
+        const image = await Firebase.uploadImage(req.file);
+        req.body.image = image
       }
-      req.body.image = image
     let rs = await updatetOne("account",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){

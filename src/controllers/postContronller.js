@@ -37,6 +37,8 @@ module.exports = {
       //now.getTime() + 7 * 60 * 60 * 1000
       req.body.time_created = new Date();
       req.body.comments = []
+      req.body.images = images
+
     let rs = await insertOne("post",req.body)
     if(rs){
       return Response(res,200,"success",rs)
