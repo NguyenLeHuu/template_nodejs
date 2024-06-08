@@ -4,7 +4,7 @@ import {ObjectId } from "mongodb";
 import { Response } from "../utils";
 const {insertOne, findOne,updatetOne,updatetComment,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 import Firebase  from "../services/firebase";
-import {getCurDay}  from "../utils/index";
+import {sendMail}  from "../services/mail";
 
 module.exports = {
   async store(req,res){
@@ -42,12 +42,12 @@ module.exports = {
     let rs = await insertOne("post",req.body)
     let acc_id = new ObjectId(req.body.author)
     let account = await findOne("account",{_id:acc_id})
-    console.log(account)
     let new_amount = parseInt(account.amount_spent) + parseInt(req.body.fee)
     await updatetOne("account",
       {filter:{_id:acc_id},data:{amount_spent:new_amount, is_new: account.is_new && false }})
-    
-      if(rs){
+
+    sendMail("nguyenlehuu1102000@gmail.com","thong bao tu nha tot","Ban da dang tin thanh cong")
+    if(rs){
       return Response(res,200,"success",rs)
     }else{
       return Response(res,400,"fail","")
