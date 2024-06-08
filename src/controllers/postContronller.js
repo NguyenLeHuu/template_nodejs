@@ -40,7 +40,14 @@ module.exports = {
       req.body.images = images
 
     let rs = await insertOne("post",req.body)
-    if(rs){
+    let acc_id = new ObjectId(req.body.author.id)
+    let account = await findOne("account",{_id:acc_id})
+    let new_amount = parseInt(account.amount_spent) + parseInt(req.body.price)
+
+    await updatetOne("account",
+      {filter:{_id:acc_id},data:{amount_spent:new_amount}})
+    
+      if(rs){
       return Response(res,200,"success",rs)
     }else{
       return Response(res,400,"fail","")
