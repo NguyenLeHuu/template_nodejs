@@ -4,7 +4,7 @@ import {ObjectId } from "mongodb";
 import { Response } from "../utils";
 import Firebase  from "../services/firebase";
 const jwt = require("jsonwebtoken");
-const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
+const {insertOne, findOne,updatetOne,findAll,aggregate,deleteFunction,pullfromArrField,pushToArrField} =require("../mongodb/app") ;
 
 var refreshTokens = [];
 module.exports = {
@@ -22,7 +22,8 @@ module.exports = {
         address:"",
         image: req.body.photoURL,
         name:req.body.displayName,
-        phone: ""
+        phone: "",
+        favorite_post:[]
       }
           if(!account){
              await insertOne("account",newAccount)
@@ -125,5 +126,68 @@ module.exports = {
     }else{
       return Response(res,400,"fail","")
     }
-  }
+  },
+  async getFavoritePost(req,res){
+    /* 
+        #swagger.tags = ['favorite post']
+        */
+    const id = req.params
+    const pipeline = [
+      {
+          $match: { _id: new ObjectId(id) }
+      },
+      {
+          $lookup: {
+              from: 'post', // The collection to join
+              localField: 'favorite_post', // The field from the account collection
+              foreignField: '_id', // The field from the posts collection
+              as: 'favoritePostsDetails' // The output array field
+          }
+      },
+      {
+        $unwind: "$favoritePostsDetails" // Unwind the array to handle each post separately
+    },
+    {
+        $project: {
+            "favoritePostsDetails._id": 1, // Include _id from post collection
+            "favoritePostsDetails.address": 1, // Include address from post collection
+            "favoritePostsDetails.price": 1 // Include price from post collection
+        }
+    }
+  ];
+
+    let rs = await aggregate("account",pipeline)
+
+    if(rs){
+      return Response(res,200,"success",rs)
+    }else{
+      return Response(res,400,"fail","")
+    }
+  },
+  async storeFavoritePost(req,res){
+    /* 
+        #swagger.tags = ['favorite post']
+        */
+    const id = req.params
+    const {push_id} = req.body
+    let rs = await pushToArrField("account","favorite_post",{filter:{_id:new ObjectId(id)},data:push_id})
+    if(rs){
+      return Response(res,200,"success",rs)
+    }else{
+      return Response(res,400,"fail","")
+    }
+  },
+  async deleteFavoritePost(req,res){
+    /* 
+        #swagger.tags = ['favorite post']
+        */
+    const id = req.params
+    const {pull_id} = req.body
+    let rs = await pullfromArrField("account","favorite_post",{filter:{_id:new ObjectId(id)},data:pull_id})
+    if(rs){
+      return Response(res,200,"success",rs)
+    }else{
+      return Response(res,400,"fail","")
+    }
+  },
 };

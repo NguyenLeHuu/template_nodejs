@@ -11,4 +11,7 @@ route.get("/:id", accountContronller.find);
 route.put("/:id", multer.Multer.single("image"), accountContronller.update);
 route.delete("/:id", accountContronller.delete);
 
+route.get("/favorite-post/:id", accountContronller.getFavoritePost);
+route.post("/favorite-post/:id", accountContronller.storeFavoritePost);
+route.put("/favorite-post/:id", accountContronller.deleteFavoritePost);
 module.exports = route;

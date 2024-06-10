@@ -2,7 +2,7 @@
 // const CustomerService = require("../services/CustomerService");
 import {ObjectId } from "mongodb";
 import { Response } from "../utils";
-const {insertOne, findOne,updatetOne,updatetComment,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
+const {insertOne, findOne,updatetOne,pushToArrField,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 import Firebase  from "../services/firebase";
 import {sendMail}  from "../services/mail";
 
@@ -89,7 +89,7 @@ module.exports = {
       photoURL,
       content
     } = req.body
-    let rs = await updatetComment("post",
+    let rs = await pushToArrField("post","comments",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){
       return Response(res,200,"success",rs)

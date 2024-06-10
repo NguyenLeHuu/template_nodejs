@@ -62,17 +62,44 @@ export async function findAll(collection,payload) {
       }
     );
 }
-export async function updatetComment(collection,payload) {
+export async function pushToArrField(collection,field,payload) {
     return new Promise(async (resolve, reject) => {
         const client = new MongoClient(MONGODB_SETTING.uri);
         try {
             const database = client.db(MONGODB_SETTING.db_name);
             const collectionRef = database.collection(collection);
-            if(payload.filter &&payload.data){
+            if(payload.filter && field && payload.data){
 
               const result = await collectionRef.updateOne(
                 payload.filter,
-                { $push: { comments: payload.data } },
+                { $push: { [field]: payload.data } },
+                { upsert: false }
+              );
+            console.log(`A document was update : ${result}`);
+          resolve(result);
+        }
+        } catch (e) {
+           console.log(e);
+          reject(e);
+        }
+        finally {
+            await client.close();
+        }
+      }
+    );
+}
+
+export async function pullfromArrField(collection,field,payload) {
+    return new Promise(async (resolve, reject) => {
+        const client = new MongoClient(MONGODB_SETTING.uri);
+        try {
+            const database = client.db(MONGODB_SETTING.db_name);
+            const collectionRef = database.collection(collection);
+            if(payload.filter &&field&&payload.data){
+
+              const result = await collectionRef.updateOne(
+                payload.filter,
+                { $pull: { [field]: payload.data } },
                 { upsert: false }
               );
             console.log(`A document was update : ${result}`);
@@ -153,6 +180,26 @@ export async function deleteFunction(collection,payload) {
               payload
             );
           console.log(`A document was delete : ${result}`);
+          resolve(result);
+        } catch (e) {
+          console.log(e);
+          reject(e);
+        }
+        finally {
+            await client.close();
+        }
+      }
+    );
+}
+export async function aggregate(collection,pipeline) {
+    return new Promise(async (resolve, reject) => {
+        const client = new MongoClient(MONGODB_SETTING.uri);
+        try {
+            const database = client.db(MONGODB_SETTING.db_name);
+            const collectionRef = database.collection(collection);
+            const cursor = collectionRef.aggregate(pipeline);
+            const result = await cursor.toArray();
+            console.log(result);
           resolve(result);
         } catch (e) {
           console.log(e);
