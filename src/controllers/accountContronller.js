@@ -144,14 +144,13 @@ module.exports = {
               as: 'favoritePostsDetails' // The output array field
           }
       },
-      {
-        $unwind: "$favoritePostsDetails" // Unwind the array to handle each post separately
-    },
+    //   {
+    //     $unwind: "$favoritePostsDetails" // Unwind the array to handle each post separately
+    // },
     {
         $project: {
-            "favoritePostsDetails._id": 1, // Include _id from post collection
-            "favoritePostsDetails.address": 1, // Include address from post collection
-            "favoritePostsDetails.price": 1 // Include price from post collection
+          _id:0,
+          favoritePostsDetails: 1
         }
     }
   ];
@@ -159,7 +158,7 @@ module.exports = {
     let rs = await aggregate("account",pipeline)
 
     if(rs){
-      return Response(res,200,"success",rs)
+      return Response(res,200,"success",rs[0].favoritePostsDetails)
     }else{
       return Response(res,400,"fail","")
     }
@@ -170,7 +169,7 @@ module.exports = {
         */
     const id = req.params
     const {push_id} = req.body
-    let rs = await pushToArrField("account","favorite_post",{filter:{_id:new ObjectId(id)},data:push_id})
+    let rs = await pushToArrField("account","favorite_post",{filter:{_id:new ObjectId(id)},data:new ObjectId(push_id)})
     if(rs){
       return Response(res,200,"success",rs)
     }else{
@@ -183,7 +182,7 @@ module.exports = {
         */
     const id = req.params
     const {pull_id} = req.body
-    let rs = await pullfromArrField("account","favorite_post",{filter:{_id:new ObjectId(id)},data:pull_id})
+    let rs = await pullfromArrField("account","favorite_post",{filter:{_id:new ObjectId(id)},data:new ObjectId(pull_id)})
     if(rs){
       return Response(res,200,"success",rs)
     }else{
