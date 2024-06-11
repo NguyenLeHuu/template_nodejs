@@ -17,7 +17,7 @@ module.exports = {
       renter_name,
       time,
       status} = req.body
-    let rs = await insertOne("schedule",{email,is_owner,is_renter})
+    let rs = await insertOne("schedule",req.body)
     if(rs){
       return Response(res,200,"success",rs)
     }else{
