@@ -4,10 +4,9 @@ import {ObjectId } from "mongodb";
 const jwt = require("jsonwebtoken");
 const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 
-var refreshTokens = [];
+
 module.exports = {
-  async checkUserInDB(req, res) {
-  },
+  
 
   async store(req,res){
     /* 
@@ -15,28 +14,10 @@ module.exports = {
         */
     const {loai_hang,danh_muc,ten_hang_hoa,mo_ta,gia_ban,
            hinh_anh_url1_url2,la_hang_flash_sales,la_hang_cho_tang,
-           la_hang_ky_gui,la_thue_nha
+           la_hang_ky_gui,
+           la_thue_nha
     } = req.body
     let rs = await insertOne("fasthub_san_pham",req.body)
-    if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
-    }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
-    }
-  },
-  async login(req,res){
-    /* 
-        #swagger.tags = ['product']
-        */
-    const {email} = req.body
-    let rs = await findOne("fasthub_san_pham",{email})
     if(rs){
       return res.status(200).json({
         status: 200,
@@ -54,7 +35,12 @@ module.exports = {
     /* 
         #swagger.tags = ['product']
         */
-    let rs = await findAll("fasthub_san_pham",{})
+        const {
+          loai_hang,
+          danh_muc
+   } = req.query
+    console.log(req.query);
+    let rs = await findAll("fasthub_san_pham",req.query)
     if(rs){
       return res.status(200).json({
         status: 200,

@@ -4,10 +4,8 @@ import {ObjectId } from "mongodb";
 const jwt = require("jsonwebtoken");
 const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 
-var refreshTokens = [];
 module.exports = {
-  async checkUserInDB(req, res) {
-  },
+  
 
   async store(req,res){
     /* 
@@ -41,25 +39,7 @@ module.exports = {
       });
     }
   },
-  async login(req,res){
-    /* 
-        #swagger.tags = ['order']
-        */
-    const {email} = req.body
-    let rs = await findOne("fasthub_res_don_hang",{email})
-    if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
-    }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
-    }
-  },
+  
   async findAll(req,res){
     /* 
         #swagger.tags = ['order']

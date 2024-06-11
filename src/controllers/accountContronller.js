@@ -4,7 +4,7 @@ import {ObjectId } from "mongodb";
 const jwt = require("jsonwebtoken");
 const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 
-var refreshTokens = [];
+
 module.exports = {
   async checkUserInDB(req, res) {
   },
