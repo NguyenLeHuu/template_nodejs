@@ -58,7 +58,28 @@ module.exports = {
     /* 
         #swagger.tags = ['post']
         */
-    let rs = await findAll("post",{})
+    const {area_from,area_to,price_from,price_to} = req.body
+
+    let query = {}
+    if (area_from && area_to) {
+      query.area = { $gte: area_from, $lte: area_to };
+  } 
+  // else if (area_from) {
+  //     query.area = { $gte: area_from };
+  // } else if (area_to) {
+  //     query.area = { $lte: area_to };
+  // }
+
+  if (price_from && price_to) {
+      query.price = { $gte: price_from, $lte: price_to };
+  } 
+  // else if (price_from) {
+  //     query.price = { $gte: price_from };
+  // } else if (price_to) {
+  //     query.price = { $lte: price_to };
+  // }
+    
+    let rs = await findAll("post",query)
     if(rs){
       return Response(res,200,"success",rs)
     }else{
