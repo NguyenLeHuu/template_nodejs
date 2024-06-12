@@ -62,7 +62,7 @@ module.exports = {
 
     let query = {}
     if (area_from && area_to) {
-      query.area = { $gte: area_from, $lte: area_to };
+      query.area = { $gte: parseInt(area_from), $lte: parseInt(area_to) };
   } 
   // else if (area_from) {
   //     query.area = { $gte: area_from };
@@ -71,14 +71,14 @@ module.exports = {
   // }
 
   if (price_from && price_to) {
-      query.price = { $gte: price_from, $lte: price_to };
+      query.price = { $gte: parseInt(price_from), $lte: parseInt(price_to) };
   } 
   // else if (price_from) {
   //     query.price = { $gte: price_from };
   // } else if (price_to) {
   //     query.price = { $lte: price_to };
   // }
-    
+    console.log(query,"queeeeeeeee");
     let rs = await findAll("post",query)
     if(rs){
       return Response(res,200,"success",rs)

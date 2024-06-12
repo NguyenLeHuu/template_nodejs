@@ -29,7 +29,8 @@ module.exports = {
     /* 
         #swagger.tags = ['schedule']
         */
-    let rs = await findAll("schedule",{})
+    const {renter_id}=req.body
+    let rs = await findAll("schedule",req.body)
     if(rs){
       return Response(res,200,"success",rs)
     }else{

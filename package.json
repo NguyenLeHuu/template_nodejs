@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node swagger.js > output.log 2>&1",
+    "start": "babel-node swagger.js",
     "dev": "nodemon --exec babel-node swagger.js ",
     "test": "jest"
   },
