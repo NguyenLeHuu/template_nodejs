@@ -16,7 +16,7 @@ module.exports = {
               type: 'file',
               required: 'true',
         } */
-    const {
+    let {
       author,
       phone,
       title,
@@ -38,6 +38,8 @@ module.exports = {
       req.body.time_created = new Date();
       req.body.comments = []
       req.body.images = images
+      req.body.price = parseInt(price)
+      req.body.area = parseInt(area)
 
     let rs = await insertOne("post",req.body)
     let acc_id = new ObjectId(req.body.author)
@@ -64,20 +66,20 @@ module.exports = {
     if (area_from && area_to) {
       query.area = { $gte: parseInt(area_from), $lte: parseInt(area_to) };
   } 
-  // else if (area_from) {
-  //     query.area = { $gte: area_from };
-  // } else if (area_to) {
-  //     query.area = { $lte: area_to };
-  // }
+  else if (area_from) {
+      query.area = { $gte: parseInt(area_from) };
+  } else if (area_to) {
+      query.area = { $lte: parseInt(area_to) };
+  }
 
   if (price_from && price_to) {
       query.price = { $gte: parseInt(price_from), $lte: parseInt(price_to) };
   } 
-  // else if (price_from) {
-  //     query.price = { $gte: price_from };
-  // } else if (price_to) {
-  //     query.price = { $lte: price_to };
-  // }
+  else if (price_from) {
+      query.price = { $gte: parseInt(price_from) };
+  } else if (price_to) {
+      query.price = { $lte: parseInt(price_to) };
+  }
     console.log(query,"queeeeeeeee");
     let rs = await findAll("post",query)
     if(rs){
