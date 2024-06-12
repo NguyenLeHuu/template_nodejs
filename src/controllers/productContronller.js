@@ -1,8 +1,9 @@
 // const db = require("../models/index");
 // const CustomerService = require("../services/CustomerService");
 import {ObjectId } from "mongodb";
+import { Response } from "../utils";
 const jwt = require("jsonwebtoken");
-const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
+const {insertOne, findOne,updateOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
 
 
 module.exports = {
@@ -19,16 +20,9 @@ module.exports = {
     } = req.body
     let rs = await insertOne("fasthub_san_pham",req.body)
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   },
   async findAll(req,res){
@@ -37,21 +31,14 @@ module.exports = {
         */
         const {
           loai_hang,
-          danh_muc
-   } = req.query
-    console.log(req.query);
-    let rs = await findAll("fasthub_san_pham",req.query)
+          danh_muc,
+   } = req.body
+    console.log(req.body);
+    let rs = await findAll("fasthub_san_pham",req.body)
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   },
   async find(req,res){
@@ -61,16 +48,9 @@ module.exports = {
     const id = req.params
     let rs = await findOne("fasthub_san_pham",{_id:new ObjectId(id)})
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   },
   async update(req,res){
@@ -80,19 +60,12 @@ module.exports = {
     const id= req.params
     console.log(req.body);
     const {ten_hang_hoa,gia_ban} = req.body
-    let rs = await updatetOne("fasthub_san_pham",
+    let rs = await updateOne("fasthub_san_pham",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   },
   async delete(req,res){
@@ -102,16 +75,9 @@ module.exports = {
     const id = req.params
     let rs = await deleteFunction("fasthub_san_pham",{_id:new ObjectId(id)})
     if(rs){
-      return res.status(200).json({
-        status: 200,
-        message: "success",
-        data: rs,
-      });
+      return Response(res,200,"success",rs)
     }else{
-      return res.status(400).json({
-        status: 400,
-        message: "fail",
-      });
+      return Response(res,400,"fail","")
     }
   }
 };

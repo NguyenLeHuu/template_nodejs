@@ -1,142 +1,98 @@
-import { MongoClient } from "mongodb";
-const MONGODB_SETTING={
-  uri : "mongodb+srv://devmaysoft:devmaysoft@cluster0.bjfird1.mongodb.net/mongodb+srv://admin:nguyenlehuu070900@cluster0.lp5othy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-  db_name: "banhang-maysoft"
+import { connectToDatabase, closeDatabaseConnection } from "./index";
+
+export async function insertOne(collection, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    const result = await collectionRef.insertOne(payload);
+    // console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    return result;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
 }
 
-export async function insertOne(collection,payload) {
-    return new Promise(async (resolve, reject) => {
-        const client = new MongoClient(MONGODB_SETTING.uri);
-        try {
-            const database = client.db(MONGODB_SETTING.db_name);
-            const collectionRef = database.collection(collection);
-            const result = await collectionRef.insertOne(payload);
-            console.log(`A document was inserted with the _id: ${result.insertedId}`);
-          resolve(result);
-        } catch (e) {
-           console.log(e);
-          reject(e);
-        }
-        finally {
-            await client.close();
-        }
+export async function findOne(collection, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    const result = await collectionRef.findOne(payload);
+    // console.log(`A document was found: ${result}`);
+    return result;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function findAll(collection, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    const cursor = await collectionRef.find(payload);
+    const result = await cursor.toArray();
+    // console.log(`Many documents were found: ${result}`);
+    return result;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function updateOne(collection, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    if (payload.filter && payload.data) {
+      const result = await collectionRef.updateOne(
+        payload.filter,
+        { $set: payload.data },
+        { upsert: false }
+      );
+      if (result.modifiedCount > 0) {
+        return result;
+      } else {
+        throw new Error("Không tìm thấy tài liệu để cập nhật");
       }
-    );
-}
-export async function findOne(collection,payload) {
-    return new Promise(async (resolve, reject) => {
-        const client = new MongoClient(MONGODB_SETTING.uri);
-        try {
-            const database = client.db(MONGODB_SETTING.db_name);
-            const collectionRef = database.collection(collection);
-            const result = await collectionRef.findOne(payload);
-            console.log(`A document was found : ${result}`);
-          resolve(result);
-        } catch (e) {
-           console.log(e);
-          reject(e);
-        }
-        finally {
-            await client.close();
-        }
-      }
-    )
-}
-export async function findAll(collection,payload) {
-    return new Promise(async (resolve, reject) => {
-        const client = new MongoClient(MONGODB_SETTING.uri);
-        try {
-            const database = client.db(MONGODB_SETTING.db_name);
-            const collectionRef = database.collection(collection);
-            const cursor = await collectionRef.find(payload);
-            const result = await cursor.toArray();
-            console.log(`Many document was found : ${result}`);
-          resolve(result);
-        } catch (e) {
-           console.log(e);
-          reject(e);
-        }
-        finally {
-            await client.close();
-        }
-      }
-    );
-}
-export async function updatetOne(collection,payload) {
-    return new Promise(async (resolve, reject) => {
-        const client = new MongoClient(MONGODB_SETTING.uri);
-        try {
-            const database = client.db(MONGODB_SETTING.db_name);
-            const collectionRef = database.collection(collection);
-            if(payload.filter &&payload.data){
-
-              const result = await collectionRef.updateOne(
-                payload.filter,
-                { $set: payload.data },
-                { upsert: false }
-              );
-            console.log(`A document was update : ${result}`);
-          resolve(result);
-        }
-
-        } catch (e) {
-           console.log(e);
-          reject(e);
-        }
-        finally {
-            await client.close();
-        }
-      }
-    );
-}
-export async function upsert(collection,payload) {
-    return new Promise(async (resolve, reject) => {
-        const client = new MongoClient(MONGODB_SETTING.uri);
-        try {
-            const database = client.db(MONGODB_SETTING.db_name);
-            const collectionRef = database.collection(collection);
-            if(payload.filter &&payload.data){
-
-              const result = await collectionRef.updateOne(
-                payload.filter,
-                { $set: payload.data },
-                { upsert: true }
-              );
-            console.log(`A document was updasert : ${result}`);
-          resolve(result);
-        }
-
-        } catch (e) {
-           console.log(e);
-          reject(e);
-        }
-        finally {
-            await client.close();
-        }
-      }
-    );
-}
-export async function deleteFunction(collection,payload) {
-    return new Promise(async (resolve, reject) => {
-        const client = new MongoClient(MONGODB_SETTING.uri);
-        try {
-            const database = client.db(MONGODB_SETTING.db_name);
-            const collectionRef = database.collection(collection);
-            const result = await collectionRef.deleteOne(
-              payload
-            );
-          console.log(`A document was delete : ${result}`);
-          resolve(result);
-        } catch (e) {
-          console.log(e);
-          reject(e);
-        }
-        finally {
-            await client.close();
-        }
-      }
-    );
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
 }
 
+export async function upsert(collection, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    if (payload.filter && payload.data) {
+      const result = await collectionRef.updateOne(
+        payload.filter,
+        { $set: payload.data },
+        { upsert: true }
+      );
+      // console.log(`A document was upserted: ${result}`);
+      return result;
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
 
-
+export async function deleteFunction(collection, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    const result = await collectionRef.deleteOne(payload);
+    if (result.deletedCount > 0) {
+      return result;
+    } else {
+      throw new Error("Không tìm thấy tài liệu để xóa");
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}

@@ -2,7 +2,10 @@ fasthub_res_khach_hang:{
     uid
     phone
     password
+    role
     address
+    dob
+    name
 },
 fasthub_san_pham:{
     loai_hang

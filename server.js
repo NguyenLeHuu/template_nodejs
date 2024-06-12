@@ -41,8 +41,8 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerFile));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send({
-    statusCode: 500,
+  res.status(400).send({
+    statusCode: 400,
     message: err.message,
   });
 });

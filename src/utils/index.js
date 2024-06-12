@@ -19,8 +19,17 @@ function setStatus(data) {
     const ngayThangNam = `${nam}-${thang}-${ngay}`;
     return ngayThangNam;
   }
+
+  function Response(res,status, message, data) {
+    return res.status(status).json({
+      status: status,
+      message:message,
+      data: data,
+    });
+  }
   
   module.exports = {
-    setStatus: setStatus,
+    setStatus,
     getCurDay,
+    Response
   };

@@ -10,8 +10,6 @@ const options = {
   const swaggerAutogen = require("swagger-autogen")(options);
   const path = require("path");
   
-  // const outputFile = `${__dirname}/swagger_output.json`;
-  // const endpointsFiles = [`${__dirname}/route/Route.js`];
   const outputFile = `swagger_output.json`;
   const endpointsFiles = [`${__dirname}/src/route/index.js`];
   
@@ -21,7 +19,7 @@ const options = {
     info: {
       version: "1.0.0", // by default: '1.0.0'
       title: "Fasthub server", // by default: 'REST API'
-      description: "API interface", // by default: ''
+      description: "API interface.", // by default: ''
     },
     basePath: "/", // by default: '/'
     servers: [
