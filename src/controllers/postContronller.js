@@ -60,7 +60,7 @@ module.exports = {
     /* 
         #swagger.tags = ['post']
         */
-    const {area_from,area_to,price_from,price_to} = req.body
+    const {area_from,area_to,price_from,price_to} = req.query
 
     let query = {}
     if (area_from && area_to) {
