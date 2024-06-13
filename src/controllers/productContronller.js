@@ -29,16 +29,6 @@ module.exports = {
     /* 
         #swagger.tags = ['product']
         */
-  //       let {
-  //         loai_hang,
-  //         danh_muc,
-  //         la_hang_flash_sales,
-  //         la_hang_cho_tang,
-  //         la_hang_ky_gui,
-  //         la_thue_nha,
-  //         page,
-  //       limit
-  //  } = req.query
    let { page, limit, ...payload } = req.query;
    let startIndex
    if(page && limit){

@@ -38,8 +38,20 @@ module.exports = {
     /* 
         #swagger.tags = ['order']
         */
-    const {uid, is_cart, status, loai_hang,ma_hoa_don} = req.body
-    let rs = await findAll("fasthub_res_don_hang",req.body)
+    let { page, limit, ...payload } = req.query;
+    let startIndex
+    if(page && limit){
+       page = parseInt(page); 
+       limit = parseInt(limit);
+       startIndex = (page - 1) * limit;
+    }else{
+     startIndex = 0
+     limit = 10
+    }
+    if(payload.is_cart){
+     payload.is_cart = JSON.parse(payload.is_cart)
+    }
+    let rs = await findAll("fasthub_res_don_hang",{...payload},startIndex,limit)
     if(rs){
       return Response(res,200,"success",rs)
     }else{
