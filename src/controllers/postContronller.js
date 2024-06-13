@@ -14,7 +14,7 @@ module.exports = {
           #swagger.parameters['image'] = {
               in: 'formData',
               type: 'file',
-              required: 'true',
+              required: 'false',
         } */
     let {
       author,
@@ -29,28 +29,30 @@ module.exports = {
       is_active,
       view_counts} = req.body
 
-      const images = [];
-      req.files.forEach(async file =>  {
-        const url = await Firebase.uploadImage(file);
-        images.push(url);
-      });
-      //now.getTime() + 7 * 60 * 60 * 1000
-      req.body.time_created = new Date();
-      req.body.comments = []
-      req.body.images = images
-      req.body.price = parseInt(price)
-      req.body.area = parseInt(area)
+      // const images = [];
+      // req.files.forEach(async file =>  {
+      //   const url = await Firebase.uploadImage(file);
+      //   images.push(url);
+      // });
+      // //now.getTime() + 7 * 60 * 60 * 1000
+      // req.body.author = JSON.parse(author);
+      // req.body.time_created = new Date();
+      // req.body.comments = []
+      // req.body.images = images
+      // req.body.price = parseInt(price)
+      // req.body.area = parseInt(area)
 
-    let rs = await insertOne("post",req.body)
-    let acc_id = new ObjectId(req.body.author)
+    // let rs = await insertOne("post",req.body)
+    let acc_id = new ObjectId(req.body.author.id)
     let account = await findOne("account",{_id:acc_id})
-    let new_amount = parseInt(account.amount_spent) + parseInt(req.body.fee)
-    await updatetOne("account",
-      {filter:{_id:acc_id},data:{amount_spent:new_amount, is_new: account.is_new && false }})
+    console.log(account);
+    // let new_amount = parseInt(account.amount_spent) + parseInt(req.body.fee)
+    // await updatetOne("account",
+    //   {filter:{_id:acc_id},data:{amount_spent:new_amount, is_new: account.is_new && false }})
 
-    sendMail("nguyenlehuu1102000@gmail.com","thong bao tu nha tot","Ban da dang tin thanh cong")
-    if(rs){
-      return Response(res,200,"success",rs)
+    // sendMail("nguyenlehuu1102000@gmail.com","thong bao tu nha tot","Ban da dang tin thanh cong")
+    if(account){
+      return Response(res,200,"success",account)
     }else{
       return Response(res,400,"fail","")
     }
