@@ -26,13 +26,12 @@ export async function findOne(collection, payload) {
   }
 }
 
-export async function findAll(collection, payload) {
+export async function findAll(collection,payload,startIndex,limit) {
   try {
     const db = await connectToDatabase();
     const collectionRef = db.collection(collection);
-    const cursor = await collectionRef.find(payload);
+    const cursor = await collectionRef.find(payload).skip(startIndex).limit(limit);
     const result = await cursor.toArray();
-    // console.log(`Many documents were found: ${result}`);
     return result;
   } catch (e) {
     console.log(e);

@@ -29,12 +29,39 @@ module.exports = {
     /* 
         #swagger.tags = ['product']
         */
-        const {
-          loai_hang,
-          danh_muc,
-   } = req.body
-    console.log(req.body);
-    let rs = await findAll("fasthub_san_pham",req.body)
+  //       let {
+  //         loai_hang,
+  //         danh_muc,
+  //         la_hang_flash_sales,
+  //         la_hang_cho_tang,
+  //         la_hang_ky_gui,
+  //         la_thue_nha,
+  //         page,
+  //       limit
+  //  } = req.query
+   let { page, limit, ...payload } = req.query;
+   let startIndex
+   if(page && limit){
+      page = parseInt(page); 
+      limit = parseInt(limit);
+      startIndex = (page - 1) * limit;
+   }else{
+    startIndex = 0
+    limit = 10
+   }
+   if(payload.la_hang_flash_sales){
+    payload.la_hang_flash_sales = JSON.parse(payload.la_hang_flash_sales)
+   }
+   if(payload.la_hang_cho_tang){
+    payload.la_hang_cho_tang = JSON.parse(payload.la_hang_cho_tang)
+   }
+   if(payload.la_hang_ky_gui){
+    payload.la_hang_ky_gui = JSON.parse(payload.la_hang_ky_gui)
+   }
+   if(payload.la_thue_nha){
+    payload.la_thue_nha = JSON.parse(payload.la_thue_nha)
+   }
+    let rs = await findAll("fasthub_san_pham",{...payload},startIndex,limit)
     if(rs){
       return Response(res,200,"success",rs)
     }else{
