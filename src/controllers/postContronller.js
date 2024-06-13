@@ -60,9 +60,9 @@ module.exports = {
     /* 
         #swagger.tags = ['post']
         */
-    const {area_from,area_to,price_from,price_to} = req.query
+    let {area_from,area_to,price_from,price_to,...payload} = req.query
 
-    let query = {}
+    let query = {...payload}
     if (area_from && area_to) {
       query.area = { $gte: parseInt(area_from), $lte: parseInt(area_to) };
   } 
