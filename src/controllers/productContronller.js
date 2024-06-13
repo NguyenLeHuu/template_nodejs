@@ -28,6 +28,7 @@ module.exports = {
   async findAll(req,res){
     /* 
         #swagger.tags = ['product']
+         ##swagger.description  = "page, limit > 0, không truyền thì mặc đinh sẽ lấy 10 thằng"
         */
    let { page, limit, ...payload } = req.query;
    let startIndex

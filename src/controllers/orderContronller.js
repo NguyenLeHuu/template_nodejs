@@ -37,10 +37,11 @@ module.exports = {
   async findAll(req,res){
     /* 
         #swagger.tags = ['order']
+        ##swagger.description  = "page, limit > 0, không truyền thì mặc đinh sẽ lấy 10 thằng"
         */
     let { page, limit, ...payload } = req.query;
     let startIndex
-    if(page && limit){
+    if(page && limit && page>0 && limit>0){
        page = parseInt(page); 
        limit = parseInt(limit);
        startIndex = (page - 1) * limit;
