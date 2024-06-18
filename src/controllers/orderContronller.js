@@ -3,7 +3,7 @@
 import {ObjectId } from "mongodb";
 import { Response } from "../utils";
 const jwt = require("jsonwebtoken");
-const {insertOne, findOne,updateOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
+const {insertOne, findOne,updateOne,findAll,upsert,deleteFunction,pushToArrField,pullfromArrField} =require("../mongodb/app") ;
 
 module.exports = {
   
@@ -92,6 +92,45 @@ module.exports = {
       trang_thai
     } = req.body
     let rs = await updateOne("fasthub_res_don_hang",
+    {filter:{_id:new ObjectId(id)},data:req.body})
+    if(rs){
+      return Response(res,200,"success",rs)
+    }else{
+      return Response(res,400,"fail","")
+    }
+  },
+  async push(req,res){
+    /* 
+        #swagger.tags = ['cart']
+        */
+    const id= req.params
+    console.log(req.body);
+    const {
+      _id,
+      gia_ban,
+      ten_hang_hoa,
+      so_luong,
+      thumb
+    } = req.body
+    let rs = await pushToArrField("fasthub_res_don_hang","san_pham",
+    {filter:{_id:new ObjectId(id)},data:req.body})
+    if(rs){
+      return Response(res,200,"success",rs)
+    }else{
+      return Response(res,400,"fail","")
+    }
+  },
+  async pull(req,res){
+    /* 
+        #swagger.tags = ['cart']
+        #swagger.description = "truyen id product zo"
+        */
+    const id= req.params
+    console.log(req.body);
+    const {
+      _id,
+    } = req.body
+    let rs = await pullfromArrField("fasthub_res_don_hang","san_pham",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){
       return Response(res,200,"success",rs)

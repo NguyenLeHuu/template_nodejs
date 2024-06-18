@@ -61,6 +61,51 @@ export async function updateOne(collection, payload) {
   }
 }
 
+export async function pushToArrField(collection, field, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    if (payload.filter && payload.data) {
+      const result = await collectionRef.updateOne(
+        payload.filter,
+        { $push: { [field]: payload.data } },
+        { upsert: false }
+      );
+      if (result.modifiedCount > 0) {
+        return result;
+      } else {
+        throw new Error("Không tìm thấy tài liệu để cập nhật");
+      }
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+// Example usage for updating with $pull
+export async function pullfromArrField(collection, field, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    if (payload.filter && payload.data) {
+      const result = await collectionRef.updateOne(
+        payload.filter,
+        { $pull: { [field]: payload.data } },
+        { upsert: false }
+      );
+      if (result.modifiedCount > 0) {
+        return result;
+      } else {
+        throw new Error("Không tìm thấy tài liệu để cập nhật");
+      }
+    }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
 export async function upsert(collection, payload) {
   try {
     const db = await connectToDatabase();
