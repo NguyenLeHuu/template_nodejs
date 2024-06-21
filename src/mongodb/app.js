@@ -27,18 +27,6 @@ export async function findOne(collection, payload) {
   }
 }
 
-export async function findOneWithPopulate(collection, payload) {
-  try {
-    const db = await connectToDatabase();
-    const collectionRef = db.collection(collection);
-    const result = await collectionRef.findOne(payload);
-    return result;
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
-}
-
 export async function findAll(collection,payload,startIndex,limit) {
   try {
     const db = await connectToDatabase();
@@ -148,6 +136,20 @@ export async function deleteFunction(collection, payload) {
     } else {
       throw new Error("Không tìm thấy tài liệu để xóa");
     }
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function aggregate(collection,pipeline) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    const cursor = collectionRef.aggregate(pipeline);
+          const result = await cursor.toArray();
+          console.log(result);
+      return result; 
   } catch (e) {
     console.log(e);
     throw e;

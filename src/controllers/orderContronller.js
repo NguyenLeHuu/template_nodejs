@@ -3,7 +3,7 @@
 import {ObjectId } from "mongodb";
 import { Response } from "../utils";
 const jwt = require("jsonwebtoken");
-const {insertOne, findOne,updateOne,findAll,upsert,deleteFunction,pushToArrField,pullfromArrField} =require("../mongodb/app") ;
+const {insertOne, findOne,updateOne,findAll,upsert,deleteFunction,pushToArrField,pullfromArrField,aggregate} =require("../mongodb/app") ;
 
 module.exports = {
   
@@ -105,7 +105,24 @@ module.exports = {
         #swagger.tags = ['cart']
         */
     const uid = req.params
-    let rs = await findOneWithPopulate("fasthub_res_don_hang",{uid:uid, is_cart:true,loai_hang:"Hàng hóa"})
+
+    const pipeline = [
+      {
+        $match: { uid:uid, is_cart:true, loai_hang:"Hàng hóa" } 
+      }
+      // {
+      //   $lookup: {
+      //     from: 'fasthub_san_pham', 
+      //     localField: 'san_pham._id', 
+      //     foreignField: '_id', 
+      //     as: 'san_pham' 
+      //   }
+      // }
+  ];
+
+    // let rs = await aggregate("fasthub_res_don_hang",pipeline)
+    let rs = await findAll("fasthub_res_don_hang",{ uid:uid, is_cart:true, loai_hang:"Hàng hóa" },1,1)
+
     if(rs){
       return Response(res,200,"success",rs)
     }else{
