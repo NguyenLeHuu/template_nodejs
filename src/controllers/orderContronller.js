@@ -104,29 +104,67 @@ module.exports = {
     /* 
         #swagger.tags = ['cart']
         */
-    const uid = req.params
+    const id = req.params
 
-    const pipeline = [
-      {
-        $match: { uid:uid, is_cart:true, loai_hang:"Hàng hóa" } 
+    let cart = await findAll("fasthub_res_don_hang",{uid:id.id, is_cart:true, loai_hang:"Hàng hóa"},0,1)
+    if(cart && cart.length > 0){
+      console.log(cart,"cảtttttt");
+      const pipeline = [
+        {
+          $match: { uid:id.id, is_cart:true, loai_hang:"Hàng hóa" } 
+        },
+        {
+          $addFields: {
+            'san_pham_id': { $map: { input: '$san_pham', as: 'sp', in: { $toObjectId: '$$sp._id' } } }
+          }
+        },
+        {
+          $lookup: {
+            from: 'fasthub_san_pham', 
+            localField: 'san_pham_id', 
+            foreignField: '_id', 
+            as: 'san_pham_docs' 
+          }
+        },
+        {
+          $project: {
+            'san_pham_docs._id': 1, 
+            'san_pham_docs.ten_hang_hoa': 1, 
+            'san_pham_docs.gia_ban': 1, 
+            'san_pham_docs.hinh_anh_url1_url2': 1,
+          }
+        },
+        {
+          $project: {
+            san_pham_id: 0 ,
+          }
+        },
+    ];
+      let rs = await aggregate("fasthub_res_don_hang",pipeline)
+  
+      if(rs && rs[0].san_pham_docs){
+        rs[0].san_pham_docs = rs[0].san_pham_docs.map(sp => {
+          let sp_rs2 = cart[0].san_pham.find(sp2 => sp2._id.toString() == sp._id.toString());
+          return {
+            ...sp,
+            so_luong: sp_rs2 ? sp_rs2.so_luong : 0
+          };
+        });
       }
-      // {
-      //   $lookup: {
-      //     from: 'fasthub_san_pham', 
-      //     localField: 'san_pham._id', 
-      //     foreignField: '_id', 
-      //     as: 'san_pham' 
-      //   }
-      // }
-  ];
-
-    // let rs = await aggregate("fasthub_res_don_hang",pipeline)
-    let rs = await findAll("fasthub_res_don_hang",{ uid:uid, is_cart:true, loai_hang:"Hàng hóa" },1,1)
-
-    if(rs){
-      return Response(res,200,"success",rs)
+      
+      if(rs){
+        return Response(res,200,"success",rs)
+      }else{
+        return Response(res,400,"fail","")
+      }
     }else{
-      return Response(res,400,"fail","")
+      let newCart = await insertOne("fasthub_res_don_hang",{
+        "is_cart": true,
+        "uid": id.id,
+        "san_pham": [],
+        "loai_hang": "Hàng hóa"    
+       })
+    return Response(res,200,"success",newCart)
     }
   },
 
