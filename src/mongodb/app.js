@@ -1,4 +1,5 @@
 import { connectToDatabase, closeDatabaseConnection } from "./index";
+import {ObjectId } from "mongodb";
 
 export async function insertOne(collection, payload) {
   try {
@@ -19,6 +20,18 @@ export async function findOne(collection, payload) {
     const collectionRef = db.collection(collection);
     const result = await collectionRef.findOne(payload);
     // console.log(`A document was found: ${result}`);
+    return result;
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function findOneWithPopulate(collection, payload) {
+  try {
+    const db = await connectToDatabase();
+    const collectionRef = db.collection(collection);
+    const result = await collectionRef.findOne(payload);
     return result;
   } catch (e) {
     console.log(e);

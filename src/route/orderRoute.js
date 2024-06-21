@@ -8,6 +8,7 @@ route.post("/", orderContronller.store);
 route.get("/", orderContronller.findAll);
 route.get("/:id", orderContronller.find);
 route.put("/:id", orderContronller.update);
+route.get("/get-cart/:uid", orderContronller.getCartForHangHoa);
 route.put("/add-product/:id", orderContronller.push);
 route.put("/remove-product/:id", orderContronller.pull);
 route.delete("/:id", orderContronller.delete);

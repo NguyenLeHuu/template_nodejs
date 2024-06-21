@@ -28,6 +28,7 @@ module.exports = {
         */
     const {phone,password} = req.body
     let rs = await findOne("fasthub_res_khach_hang",{phone,password})
+    delete rs.password;
     if(rs){
       return Response(res,200,"success",rs)
     }else{

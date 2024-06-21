@@ -99,19 +99,40 @@ module.exports = {
       return Response(res,400,"fail","")
     }
   },
+
+  async getCartForHangHoa(req,res){
+    /* 
+        #swagger.tags = ['cart']
+        */
+    const uid = req.params
+    let rs = await findOneWithPopulate("fasthub_res_don_hang",{uid:uid, is_cart:true,loai_hang:"Hàng hóa"})
+    if(rs){
+      return Response(res,200,"success",rs)
+    }else{
+      return Response(res,400,"fail","")
+    }
+  },
+
   async push(req,res){
     /* 
         #swagger.tags = ['cart']
         */
     const id= req.params
-    console.log(req.body);
-    const {
+    // console.log(req.body);
+    let {
       _id,
-      gia_ban,
-      ten_hang_hoa,
-      so_luong,
-      thumb
     } = req.body
+    let cart = await findOne("fasthub_res_don_hang",{_id:new ObjectId(id)})
+    let existProduct = cart.san_pham.find(product => String(product._id) === String(_id));
+
+    if(existProduct){
+        await pullfromArrField("fasthub_res_don_hang","san_pham",
+        {filter:{_id:new ObjectId(id)},data:{_id:_id}})
+        req.body.so_luong = parseInt(existProduct["so_luong"]) + 1
+    }else{
+      req.body.so_luong = 1
+    }
+    
     let rs = await pushToArrField("fasthub_res_don_hang","san_pham",
     {filter:{_id:new ObjectId(id)},data:req.body})
     if(rs){
@@ -127,11 +148,22 @@ module.exports = {
         */
     const id= req.params
     console.log(req.body);
-    const {
+    let {
       _id,
     } = req.body
+    let cart = await findOne("fasthub_res_don_hang",{_id:new ObjectId(id)})
+    let existProduct = cart.san_pham.find(product => String(product._id) === String(_id));
+    console.log(existProduct,"existProductexistProduct");
+
+    if(existProduct && parseInt(existProduct.so_luong) > 1){
+        req.body.so_luong = parseInt(existProduct["so_luong"]) - 1
+        console.log(req.body);
+        await pushToArrField("fasthub_res_don_hang","san_pham",
+          {filter:{_id:new ObjectId(id)},data:req.body})
+    }
+
     let rs = await pullfromArrField("fasthub_res_don_hang","san_pham",
-    {filter:{_id:new ObjectId(id)},data:req.body})
+    {filter:{_id:new ObjectId(id)},data:existProduct})
     if(rs){
       return Response(res,200,"success",rs)
     }else{
