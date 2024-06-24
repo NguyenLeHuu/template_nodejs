@@ -22,13 +22,13 @@ app.use(cors());
 
 
 // Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 phút
-  max: 100, // Giới hạn mỗi IP chỉ được gửi tối đa 100 request trong 15 phút
-  message: "Quá nhiều yêu cầu từ IP này, vui lòng thử lại sau 15 phút",
-  headers: true, // Bao gồm các header về giới hạn
-});
-app.use(limiter);
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 phút
+//   max: 100, // Giới hạn mỗi IP chỉ được gửi tối đa 100 request trong 15 phút
+//   message: "Quá nhiều yêu cầu từ IP này, vui lòng thử lại sau 15 phút",
+//   headers: true, // Bao gồm các header về giới hạn
+// });
+// app.use(limiter);
 
 app.get("/", function (req, res) {
   res.set("Content-Type", "text/html; charset=utf-8");
