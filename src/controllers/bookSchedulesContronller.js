@@ -3,6 +3,7 @@
 import {ObjectId } from "mongodb";
 import { Response } from "../utils";
 const {insertOne, findOne,updatetOne,findAll,upsert,deleteFunction} =require("../mongodb/app") ;
+import {sendMail}  from "../services/mail";
 
 module.exports = {
   async store(req,res){
@@ -18,6 +19,9 @@ module.exports = {
       time,
       status} = req.body
     let rs = await insertOne("schedule",req.body)
+    // sendMail(gmail,"Thông báo từ nhà tốt","Bạn vừa đặt lịch xem phòng. Đang chờ xác nhận")
+    // sendMail(gmail,"Thông báo từ nhà tốt","Bạn có 1 lịch xem phòng cần xác nhận!")
+
     if(rs){
       return Response(res,200,"success",rs)
     }else{

@@ -18,6 +18,7 @@ module.exports = {
         } */
     let {
       author,
+      gmail,
       phone,
       title,
       description,
@@ -49,7 +50,7 @@ module.exports = {
     await updatetOne("account",
       {filter:{_id:acc_id},data:{amount_spent:new_amount, is_new: account.is_new && false }})
 
-    sendMail("nguyenlehuu1102000@gmail.com","thong bao tu nha tot","Ban da dang tin thanh cong")
+    sendMail(gmail,"thong bao tu nha tot","Ban da dang tin thanh cong")
     if(rs){
       return Response(res,200,"success",rs)
     }else{
@@ -61,7 +62,7 @@ module.exports = {
     /* 
         #swagger.tags = ['post']
         */
-    let {area_from,area_to,price_from,price_to,...payload} = req.query
+    let {area_from,area_to,price_from,price_to,text,...payload} = req.query
 
     let query = {...payload}
     if (area_from && area_to) {
@@ -82,6 +83,21 @@ module.exports = {
       query.price = { $lte: parseInt(price_to) };
   }
     console.log(query,"queeeeeeeee");
+    let rs = await findAll("post",query)
+    if(rs){
+      return Response(res,200,"success",rs)
+    }else{
+      return Response(res,400,"fail","")
+    }
+  },
+  async search(req,res){
+    /* 
+        #swagger.tags = ['post']
+        */
+    const {text_search} = req.query
+    let query ={
+      $text: { $search: text_search }
+    }
     let rs = await findAll("post",query)
     if(rs){
       return Response(res,200,"success",rs)
